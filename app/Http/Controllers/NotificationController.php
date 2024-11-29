@@ -26,6 +26,8 @@ class NotificationController extends Controller
     {
         // Define the message
         // echo $request;
+        $reportTopic = $request->query('report', 'default-topic'); 
+
         $message = CloudMessage::new()
             ->withAndroidConfig(
                 [
@@ -37,10 +39,10 @@ class NotificationController extends Controller
                 ]
             )
             // await subscribeTopic("all-complaints");
-            ->toTopic('all-complaints') // Target the topic using toTopic method
+            ->toTopic($reportTopic) // Target the topic using toTopic method
             ->withNotification(Notification::create(
                 'Hello world', // Notification title
-                'A complaint has been updated!' // Notification body
+                $reportTopic // Notification body
             ));
         try {
             $this->messaging->send($message);
